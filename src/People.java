@@ -1,3 +1,8 @@
+/**
+ * 
+ * People
+ */
+
 public abstract class People {
 
 private String id;
@@ -25,7 +30,7 @@ public String getName() {
 }
 
 public void setName(String name) {
-    if (name == null || name.isEmpty()) {
+    if (name == null || name.trim().isEmpty()) {
         throw new IllegalArgumentException("Name can not be empty.");
     }
 }

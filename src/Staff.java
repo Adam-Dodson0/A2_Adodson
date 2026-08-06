@@ -1,3 +1,8 @@
+/**
+ * 
+ * Staff
+ */
+
 public class Staff extends People {
 
 private String role;

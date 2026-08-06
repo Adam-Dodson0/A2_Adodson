@@ -1,6 +1,12 @@
+/**
+ *  A park visitor, Adds a ticket type on top of the common Person Data
+ * 
+ * Visitor
+ */
+
 public class Visitor extends People implements Comparable<Visitor>{
 
-private String ticketType;
+    private String ticketType;
 
     public Visitor (String id, String name, int age, String ticketType) {
         super(id, name, age);
@@ -24,6 +30,11 @@ private String ticketType;
     @Override
     public int compareTo(Visitor other) {
         return Integer.compare(this.getAge(), other.getAge());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
     }
 
     @Override
