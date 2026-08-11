@@ -1,30 +1,46 @@
+
 /**
- *  A park visitor, Adds a ticket type on top of the common Person Data
- * 
- * Visitor
+ *  A park visitor, Adds a ticket type on top
+ *  of the common Person Data. Implements Comparable to
+ * be able to order visitors by age.
+ *
+ * @author Adam Dodson
+ * @version 1
+ * @see People
+ * @param Visitor
  */
+public class Visitor extends People implements Comparable<Visitor> {
 
-public class Visitor extends People implements Comparable<Visitor>{
+    private String ticketNumber;
 
-    private String ticketType;
-
-    public Visitor (String id, String name, int age, String ticketType) {
+    /**
+     *
+     * @param id
+     * @param name
+     * @param age
+     * @param ticketNumber
+     */
+    public Visitor(String id, String name, int age, String ticketNumber) {
         super(id, name, age);
-        setTicketType(ticketType);
+        this.ticketNumber = (ticketNumber == null || ticketNumber.isBlank()) ? "Normal" : ticketNumber;
     }
 
+    /**
+     *
+     * @param id
+     * @param name
+     * @param age
+     */
     public Visitor(String id, String name, int age) {
         this(id, name, age, "Normal");
     }
 
-    public String getTicketType() {
-        return ticketType;
+    public String getticketNumber() {
+        return ticketNumber;
     }
 
-    public void setTicketType(String ticketType) {
-        if (ticketType == null || ticketType.isEmpty()) {
-            throw new IllegalArgumentException("Ticket type is invalid.");
-        }
+    public void setTicketNumber(String ticketNumber) {
+        this.ticketNumber = ticketNumber;
     }
 
     @Override
@@ -33,13 +49,8 @@ public class Visitor extends People implements Comparable<Visitor>{
     }
 
     @Override
-    public int hashCode() {
-        return getId().hashCode();
-    }
-
-    @Override
     public String toString() {
-        return "Visitor{ " + super.toString() + ", Ticket = " + ticketType + "}";
+        return "Visitor{ " + super.toString() + ", Ticket = " + getticketNumber() + "}";
     }
 
 }
