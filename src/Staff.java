@@ -43,7 +43,7 @@ public class Staff extends People {
         this(id, name, age, "Staff Member");
     }
 
-    public String getrole() {
+    public String getRole() {
         return role;
     }
 

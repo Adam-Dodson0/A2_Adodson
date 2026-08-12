@@ -13,7 +13,7 @@ import java.util.Objects;
  * @param Inspectable
  */
 
-public class Ride extends Attraction implements Inspectable, Maintainable{
+public class Ride extends Attraction implements Inspectable {
 
     private boolean inService;
     private boolean closedForInspection = false;

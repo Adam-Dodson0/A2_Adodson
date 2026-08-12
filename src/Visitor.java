@@ -35,7 +35,7 @@ public class Visitor extends People implements Comparable<Visitor> {
         this(id, name, age, "Normal");
     }
 
-    public String getticketNumber() {
+    public String getTicketNumber() {
         return ticketNumber;
     }
 
@@ -50,7 +50,7 @@ public class Visitor extends People implements Comparable<Visitor> {
 
     @Override
     public String toString() {
-        return "Visitor{ " + super.toString() + ", Ticket = " + getticketNumber() + "}";
+        return "Visitor{ " + super.toString() + ", Ticket = " + getTicketNumber() + "}";
     }
 
 }
