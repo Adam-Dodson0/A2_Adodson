@@ -1,12 +1,12 @@
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * 
+ *
  * MaintenanceManager
  */
-
 public class MaintenanceManager {
 
     private final List<Maintainable> tracked = new ArrayList<>();
@@ -23,9 +23,9 @@ public class MaintenanceManager {
             System.out.println("  <none registered>");
             return;
         }
-    
-    for (Maintainable m : tracked) {
-        System.out.println("    " + m.getMaintainableName() + " -- "
+
+        for (Maintainable m : tracked) {
+            System.out.println("    " + m.getMaintainableName() + " -- "
                     + (m.isUnderMaintenance() ? "UNDER MAINTENANCE" : "operational")
                     + ", " + m.getMaintenanceHistory().size() + " past record(s).");
         }

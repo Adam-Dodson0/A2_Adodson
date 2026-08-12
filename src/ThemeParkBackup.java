@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class ThemeParkBackup {
@@ -30,7 +29,7 @@ public class ThemeParkBackup {
         System.out.println("[BACKUP] Saving park '" + park.getParkName() + "' to " + filename + " ...");
 
         try (PrintWriter out = new PrintWriter(filename)) {
-            for (Attraction a : park.getAttractions()) {
+            for (Attraction a : park.getAttractions().values()) {
                 //ATTRACTION, <type>,<id>,<name>,<perCycle>,<cyclesRun>
                 out.println(String.join(SEP, "ATTRACTION",
                         a.getClass().getSimpleName(), a.getId(), a.getName(),
@@ -138,7 +137,7 @@ public class ThemeParkBackup {
                     throw new IllegalArgumentException("Unknown attraction type: " + type);
                 }
                 attraction.setCyclesRan(cyclesRun);
-                park.addAttraction(attraction);
+                park.registerAtrraction(attraction);
                 break;
             }
 
@@ -225,12 +224,10 @@ public class ThemeParkBackup {
     }
 
     private static Attraction requireAttraction(ThemePark park, String id, int lineNo) {
-        List<Attraction> all = park.getAttractions();
-        for (Attraction a : all) {
-            if (a != null && id.equals(a.getId())) {
-                return a;
-            }
+        Attraction a = park.getAttractions().get(id);
+        if (a == null) {
+            throw new IllegalArgumentException("Line " + lineNo + ", references unknown attraction ID:" + id);
         }
-        throw new IllegalArgumentException("Line " + lineNo + ", references unknown attraction ID:" + id);
+        return a;
     }
 }

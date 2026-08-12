@@ -1,10 +1,11 @@
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * Represemts a Ride Attraction in the Theme Park.
- * has concurrency with waiting lines and assigned operators.
+ * Represemts a Ride Attraction in the Theme Park. has concurrency with waiting
+ * lines and assigned operators.
  *
  * @author Adam Dodson
  * @version 1
@@ -12,7 +13,6 @@ import java.util.Objects;
  * @param Attraction
  * @param Inspectable
  */
-
 public class Ride extends Attraction implements Inspectable {
 
     private boolean inService;
@@ -41,7 +41,6 @@ public class Ride extends Attraction implements Inspectable {
      *
      * @param operator Staff member assigned operators
      */
-
     @Override
     public void assignOperator(Staff operator) {
         setOperator(operator);
@@ -51,7 +50,6 @@ public class Ride extends Attraction implements Inspectable {
     //  ----------- RIDES OWN RULES -------------
     // ------------- (POLYMORPHISM) -------------
     // ==========================================
-
     public void run() {
         if (!inService || closedForInspection) {
             throw new IllegalStateException("Can not run ride '" + getName()
@@ -61,14 +59,13 @@ public class Ride extends Attraction implements Inspectable {
             throw new IllegalStateException("Cannot run ride '" + getName()
                     + "': No operator assigned.");
         }
-
         runOneCycle();
     }
 
     private void runOneCycle() {
         incrementCyclesRan();
     }
-    
+
     public boolean isInService() {
         return inService;
     }
@@ -97,7 +94,6 @@ public class Ride extends Attraction implements Inspectable {
     // ==========================================
     // --- REQUIRED FOR INSPECTABLE INTERFACE ---
     // ==========================================
-
     @Override
     public String getInspectableName() {
         return getName();
@@ -123,7 +119,7 @@ public class Ride extends Attraction implements Inspectable {
         return closedForInspection;
     }
 
-        @Override
+    @Override
     public synchronized void reopen() {
         this.closedForInspection = false;
         this.inService = true;
@@ -144,21 +140,21 @@ public class Ride extends Attraction implements Inspectable {
     }
 
     @Override
-    public synchronized  void recordInspection(String outcome) {
+    public synchronized void recordInspection(String outcome) {
         Objects.requireNonNull(outcome, "Inspection outcome can not be null.");
-        lastInspectionOutcome = outcome;
-        System.out.println("[" + getName() + "] Inspection outcome recorded:" + outcome);
-        if (outcome.isEmpty() || !outcome.isBlank()) {
+        if (!outcome.isBlank()) {
             this.lastInspectionOutcome = outcome.trim();
+        } else {
+            this.lastInspectionOutcome = "Routine inspection passed";
         }
+        System.out.println("[" + getName() + "] Inspection outcome recorded:" + this.lastInspectionOutcome);
     }
 
     // ==========================================
     //  -- REQUIRED FOR MAINTAINABLE INTERFACE --
     // ==========================================
-
-    public void Maintenance() {
-        if (this.inService == true) {
+    public void maintenance() {
+        if (this.inService) {
             this.inService = false;
             this.closedForInspection = true;
             this.lastInspectionOutcome = "UnderGoing Maintenace";
@@ -171,24 +167,24 @@ public class Ride extends Attraction implements Inspectable {
 
     @Override
     public String getMaintainableName() {
-        return "[Ride = " + getName() + "]"; 
+        return "[Ride = " + getName() + "]";
     }
 
     @Override
     public synchronized void beginMaintenance(MaintenanceType type) {
         Objects.requireNonNull(type, "Maintenance type can not be null.");
-        
+
         if (underMaintenance) {
             throw new IllegalArgumentException(getMaintainableName() + " is already under maintenance.");
-            }
-            underMaintenance = true;
-            pendingMaintenanceType = type;
-            System.out.println("[Ride: " + getName() + "] Maintenance STARTED (" + type.getDescription() + ").");
+        }
+        underMaintenance = true;
+        pendingMaintenanceType = type;
+        System.out.println("[Ride: " + getName() + "] Maintenance STARTED (" + type.getDescription() + ").");
     }
 
     @Override
     public synchronized List<MaintenanceRecord> getMaintenanceHistory() {
-        return new ArrayList<> (maintenanceHistory);
+        return new ArrayList<>(maintenanceHistory);
     }
 
     @Override

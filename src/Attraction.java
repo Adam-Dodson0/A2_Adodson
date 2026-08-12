@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,24 +9,20 @@ import java.util.Objects;
 import java.util.Queue;
 
 /**
- * Abstract class of a Theme parks Attractions
- * ABSTRACT base class for every attraction in the park. All shared state and
- * behaviour lives here, written once:
- *   - unique numeric identifier + name
- *   - the waiting line   (Queue/LinkedList -- strict FIFO, unbounded)
- *   - the visit history  (ArrayList -- ordered, growable, duplicates allowed)
- *   - the operator       (association with Staff)
- *   - visitors served per cycle + cycles run
- *   - runCycle()         (TEMPLATE METHOD -- shared machinery here, each
- *                         subclass supplies its own canRunCycle() rule)
- *   - the maintenance workflow (implements {@link Maintainable})
- *  * Being abstract stops anyone creating a "generic attraction" that is none
- * of the specific kinds (ABSTRACTION). Every field stays private, with
- * validated access only through methods (ENCAPSULATION). Concrete
- * subclasses supply their own {@link #canRunCycle()} rule (POLYMORPHISM),
- * and every attraction automatically INHERITS every method below.
+ * Abstract class of a Theme parks Attractions ABSTRACT base class for every
+ * attraction in the park. All shared state and behaviour lives here, written
+ * once: - unique numeric identifier + name - the waiting line (Queue/LinkedList
+ * -- strict FIFO, unbounded) - the visit history (ArrayList -- ordered,
+ * growable, duplicates allowed) - the operator (association with Staff) -
+ * visitors served per cycle + cycles run - runCycle() (TEMPLATE METHOD --
+ * shared machinery here, each subclass supplies its own canRunCycle() rule) -
+ * the maintenance workflow (implements {@link Maintainable}) * Being abstract
+ * stops anyone creating a "generic attraction" that is none of the specific
+ * kinds (ABSTRACTION). Every field stays private, with validated access only
+ * through methods (ENCAPSULATION). Concrete subclasses supply their own
+ * {@link #canRunCycle()} rule (POLYMORPHISM), and every attraction
+ * automatically INHERITS every method below.
  */
-
 public abstract class Attraction implements Maintainable {
 
     private final String id;
@@ -46,7 +43,7 @@ public abstract class Attraction implements Maintainable {
     private final List<MaintenanceRecord> maintenanceHistory = new ArrayList<>();
 
     /**
-     * 
+     *
      * @param id
      * @param name
      * @param visitorsPerCycle
@@ -64,10 +61,10 @@ public abstract class Attraction implements Maintainable {
         this.id = id;
         this.name = name;
         this.visitorsPerCycle = visitorsPerCycle;
-        this.maxCapacityPerCycle = Math.max (1, maxCapacityPerCycle);
+        this.maxCapacityPerCycle = Math.max(1, maxCapacityPerCycle);
     }
 
-        public String getId() {
+    public String getId() {
         return id;
     }
 
@@ -79,11 +76,9 @@ public abstract class Attraction implements Maintainable {
         return visitorsPerCycle;
     }
 
-
     // ==========================================
     //  ----------- VISITOR SERVED  -------------
     // ==========================================
-
     public static synchronized int getParkWideTotalServed() {
         return parkWideTotalServed;
     }
@@ -105,13 +100,11 @@ public abstract class Attraction implements Maintainable {
     // ==========================================
     //  --------- OPERATOR MANAGEMENT -----------
     // ==========================================
-    
-
-    public synchronized  Staff getOperator() {
+    public synchronized Staff getOperator() {
         return operator;
     }
 
-    public void setOperator(Staff  operator) {
+    public void setOperator(Staff operator) {
         this.operator = operator;
     }
 
@@ -126,14 +119,13 @@ public abstract class Attraction implements Maintainable {
             System.out.println("[" + name + "] No operator to remove.");
             return;
         }
-            System.out.println("[" + name + "] Operator removed: " + operator.getName());
-            this.operator = null;
+        System.out.println("[" + name + "] Operator removed: " + operator.getName());
+        this.operator = null;
     }
 
     // ==========================================
     //  ----------- THE WAITING LINE ------------
     // ==========================================
-
     public Queue<Visitor> getWaitingLine() {
         return waitingLine;
     }
@@ -154,7 +146,7 @@ public abstract class Attraction implements Maintainable {
         return v;
     }
 
-    public synchronized  void printWaitingLine() {
+    public synchronized void printWaitingLine() {
         System.out.println("[" + name + "] Waiting line (" + waitingLine.size() + "visitor(s), front first):");
         if (waitingLine.isEmpty()) {
             System.out.println("    <empty>");
@@ -171,13 +163,12 @@ public abstract class Attraction implements Maintainable {
     }
 
     public synchronized List<Visitor> getWaitingLineSnapShot() {
-        return new ArrayList<> (waitingLine);
+        return new ArrayList<>(waitingLine);
     }
 
     // ==========================================
     //  -------------VISIT HISTORY---------------
     // ==========================================
-
     public List<Visitor> getVisitHistory() {
         return visitHistory;
     }
@@ -191,10 +182,10 @@ public abstract class Attraction implements Maintainable {
     public synchronized boolean hasServed(Visitor v) {
         Objects.requireNonNull(v, "Can not check history for a null visitor.");
         boolean found = visitHistory.contains(v);
-        System.out.println("[" + name + "] Has visitor " 
-                            + v.getName() + " (ID " + v.getId() 
-                            + ") been served here? " + (found ? "YES" : "NO"));
-                            return found;
+        System.out.println("[" + name + "] Has visitor "
+                + v.getName() + " (ID " + v.getId()
+                + ") been served here? " + (found ? "YES" : "NO"));
+        return found;
     }
 
     public int getHistoryCount() {
@@ -207,7 +198,7 @@ public abstract class Attraction implements Maintainable {
     }
 
     public synchronized List<Visitor> getHistorySnapshot() {
-        return new ArrayList<> (visitHistory);
+        return new ArrayList<>(visitHistory);
     }
 
     public synchronized void printHistory() {
@@ -244,8 +235,7 @@ public abstract class Attraction implements Maintainable {
     // ==========================================
     //  ----------- RUNNING A CYCLE -------------
     // ==========================================
-
-    public synchronized  int getCyclesRan() {
+    public synchronized int getCyclesRan() {
         return cyclesRun;
     }
 
@@ -260,9 +250,10 @@ public abstract class Attraction implements Maintainable {
     }
 
     public synchronized void setCyclesRan(int cyclesRun) {
-    if (cyclesRun < 0) 
-        throw new IllegalArgumentException("Cycle count can not be negative.");
-            this.cyclesRun = cyclesRun;
+        if (cyclesRun < 0) {
+            throw new IllegalArgumentException("Cycle count can not be negative.");
+        }
+        this.cyclesRun = cyclesRun;
     }
 
     public synchronized void runCycle() {
@@ -281,16 +272,14 @@ public abstract class Attraction implements Maintainable {
             visitHistory.add(v);
             served++;
         }
-            cyclesRun++;
-            addToParkWideTotal(served);
-            System.out.println("[" + name + "] Cycle #" + cyclesRun + "completed  -- served" + served + "visitor(s) this cycle");
+        cyclesRun++;
+        addToParkWideTotal(served);
+        System.out.println("[" + name + "] Cycle #" + cyclesRun + "completed  -- served" + served + "visitor(s) this cycle");
     }
-    
 
     // ==========================================
     //  -- REQUIRED FOR MAINTAINABLE INTERFACE --
     // ==========================================
-
     @Override
     public String getMaintainableName() {
         return getClass().getSimpleName() + " '" + name + "'(ID " + id + ")";
@@ -325,7 +314,7 @@ public abstract class Attraction implements Maintainable {
     }
 
     @Override
-    public synchronized List<MaintenanceRecord> getMaintenanceHistory() { 
+    public synchronized List<MaintenanceRecord> getMaintenanceHistory() {
         return new ArrayList<>(maintenanceHistory);
     }
 

@@ -1,7 +1,8 @@
+
 /**
  * A Show Attraction within the Theme Park
  * Show Attraction is different to the Ride Attraction Class
- * 
+ *
  * @author Adam Dodson
  * @version 1
  * @param Show
@@ -14,11 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 public class Show extends Attraction {
-    
+
     private final Map<String, List<String>> showTypeSchedules = new HashMap<>();
 
-    public Show (String id, String name, int visitorsPerCycle,
-         int maxCapacityPerCycle, List<String>showTimes) {
+    public Show(String id, String name, int visitorsPerCycle,
+            int maxCapacityPerCycle, List<String> showTimes) {
         super(id, name, visitorsPerCycle, maxCapacityPerCycle);
     }
 
@@ -68,6 +69,6 @@ public class Show extends Attraction {
     @Override
     public String toString() {
         return "Show{ID='" + getId() + "', Name='" + getName()
-        + "', Scheduled show time: '" + showTypeSchedules + "'}";
+                + "', Scheduled show time: '" + showTypeSchedules + "'}";
     }
 }
