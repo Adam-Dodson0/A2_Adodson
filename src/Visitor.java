@@ -11,18 +11,18 @@
  */
 public class Visitor extends People implements Comparable<Visitor> {
 
-    private String ticketNumber;
+    private String ticketType;
 
     /**
      *
      * @param id
      * @param name
      * @param age
-     * @param ticketNumber
+     * @param ticketType
      */
-    public Visitor(String id, String name, int age, String ticketNumber) {
+    public Visitor(String id, String name, int age, String ticketType) {
         super(id, name, age);
-        this.ticketNumber = (ticketNumber == null || ticketNumber.isBlank()) ? "Normal" : ticketNumber;
+        this.ticketType = (ticketType == null || ticketType.isBlank()) ? "Normal" : ticketType;
     }
 
     /**
@@ -35,12 +35,12 @@ public class Visitor extends People implements Comparable<Visitor> {
         this(id, name, age, "Normal");
     }
 
-    public String getTicketNumber() {
-        return ticketNumber;
+    public String getTicketType() {
+        return ticketType;
     }
 
-    public void setTicketNumber(String ticketNumber) {
-        this.ticketNumber = ticketNumber;
+    public void setTicketType(String ticketType) {
+        this.ticketType = ticketType;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class Visitor extends People implements Comparable<Visitor> {
 
     @Override
     public String toString() {
-        return "Visitor{ " + super.toString() + ", Ticket = " + getTicketNumber() + "}";
+        return "Visitor{ " + super.toString() + ", Ticket = " + getTicketType() + "}";
     }
 
 }

@@ -41,9 +41,16 @@ public class Ride extends Attraction implements Inspectable {
      *
      * @param operator Staff member assigned operators
      */
+
+    @Override
     public void assignOperator(Staff operator) {
         setOperator(operator);
     }
+
+    // ==========================================
+    //  ----------- RIDES OWN RULES -------------
+    // ------------- (POLYMORPHISM) -------------
+    // ==========================================
 
     public void run() {
         if (!inService || closedForInspection) {
@@ -61,6 +68,94 @@ public class Ride extends Attraction implements Inspectable {
     private void runOneCycle() {
         incrementCyclesRan();
     }
+    
+    public boolean isInService() {
+        return inService;
+    }
+
+    public void setInService(boolean inService) {
+        this.inService = inService;
+    }
+
+    @Override
+    protected boolean canRunCycle() {
+        if (closedForInspection) {
+            System.out.println("[" + getName() + "] REFUSED to run: closed for inspection.");
+            return false;
+        }
+        if (getOperator() == null) {
+            System.out.println("[" + getName() + "] REFUSED to run: no operator assigned.");
+            return false;
+        }
+        if (getWaitingLineSize() == 0) {
+            System.out.println("[" + getName() + "] REFUSED to run: the waiting line is empty.");
+            return false;
+        }
+        return true;
+    }
+
+    // ==========================================
+    // --- REQUIRED FOR INSPECTABLE INTERFACE ---
+    // ==========================================
+
+    @Override
+    public String getInspectableName() {
+        return getName();
+    }
+
+    public boolean inspect() {
+        if (inService && !closedForInspection) {
+            this.lastInspectionOutcome = "Passed inspection";
+            return true;
+        } else {
+            this.lastInspectionOutcome = "Failed inspection - Maintenance required";
+            this.closedForInspection = true;
+            return false;
+        }
+    }
+
+    public String getLastInspectionOutcome() {
+        return lastInspectionOutcome;
+    }
+
+    @Override
+    public boolean isClosedForInspection() {
+        return closedForInspection;
+    }
+
+        @Override
+    public synchronized void reopen() {
+        this.closedForInspection = false;
+        this.inService = true;
+        setUnderMaintenance(false);
+        System.out.println("[" + getName() + "] REOPENED after inspection.");
+    }
+
+    @Override
+    public synchronized void closeForInspection() {
+        this.closedForInspection = true;
+        this.inService = false;
+        System.out.println("[" + getName() + "] CLOSED for inspection -- can not be used.");
+    }
+
+    @Override
+    public synchronized String getInspectionStatus() {
+        return getInspectableName() + " is " + (closedForInspection ? "CLOSED (inspection underway)" : "OPEN") + "; last outcome: " + lastInspectionOutcome;
+    }
+
+    @Override
+    public synchronized  void recordInspection(String outcome) {
+        Objects.requireNonNull(outcome, "Inspection outcome can not be null.");
+        lastInspectionOutcome = outcome;
+        System.out.println("[" + getName() + "] Inspection outcome recorded:" + outcome);
+        if (outcome.isEmpty() || !outcome.isBlank()) {
+            this.lastInspectionOutcome = outcome.trim();
+        }
+    }
+
+    // ==========================================
+    //  -- REQUIRED FOR MAINTAINABLE INTERFACE --
+    // ==========================================
 
     public void Maintenance() {
         if (this.inService == true) {
@@ -73,55 +168,6 @@ public class Ride extends Attraction implements Inspectable {
             this.lastInspectionOutcome = "Maintenance complete - Passed inspection";
         }
     }
-
-    // ==========================================
-    // --- REQUIRED FOR INSPECTABLE INTERFACE ---
-    // ==========================================
-
-        public boolean inspect() {
-        if (inService && !closedForInspection) {
-            this.lastInspectionOutcome = "Passed inspection";
-            return true;
-        } else {
-            this.lastInspectionOutcome = "Failed inspection - Maintenance required";
-            this.closedForInspection = true;
-            return false;
-        }
-    }
-
-    @Override
-    public void closeForInspection() {
-        this.closedForInspection = true;
-        this.inService = false;
-    }
-
-    @Override
-    public void reopen() {
-        this.closedForInspection = false;
-        this.inService = true;
-        setUnderMaintenance(false);
-    }
-
-    @Override
-    public String getInspectableName() {
-        return getName();
-    }
-
-    @Override
-    public String getInspectionStatus() {
-        return lastInspectionOutcome;
-    }
-
-    @Override
-    public void recordInspection(String outcome) {
-        if (outcome != null && !outcome.isBlank()) {
-            this.lastInspectionOutcome = outcome.trim();
-        }
-    }
-
-    // ==========================================
-    //  -- REQUIRED FOR MAINTAINABLE INTERFACE --
-    // ==========================================
 
     @Override
     public String getMaintainableName() {
@@ -156,26 +202,5 @@ public class Ride extends Attraction implements Inspectable {
         underMaintenance = false;
         pendingMaintenanceType = null;
         System.out.println("[Ride " + getId() + "] Maintenance COMPLETED: " + record);
-    }
-
-    // ==========================================
-    // ------ ADDITIONAL GETTERS & SETTERS ------
-    // ==========================================
-
-    public boolean isInService() {
-        return inService;
-    }
-
-    public void setInService(boolean inService) {
-        this.inService = inService;
-    }
-
-    @Override
-    public boolean isClosedForInspection() {
-        return closedForInspection;
-    }
-
-    public String getLastInspectionOutcome() {
-        return lastInspectionOutcome;
     }
 }

@@ -22,18 +22,9 @@ public class Show extends Attraction {
         super(id, name, visitorsPerCycle, maxCapacityPerCycle);
     }
 
+    @Override
     public void assignOperator(Staff operator) {
         setOperator(operator);
-    }
-
-    public void addShowTypeSchedule(String showType, List<String> times) {
-        if (showType == null || showType.isBlank()) {
-            throw new IllegalArgumentException("Show type can not be null or Empty.");
-        }
-        if (times == null || times.isEmpty()) {
-            throw new IllegalArgumentException("Must provide at least one showtime.");
-        }
-        showTypeSchedules.put(showType.trim(), new ArrayList<>(times));
     }
 
     public void runShow(String showType, String time) {
@@ -48,8 +39,30 @@ public class Show extends Attraction {
         System.out.println("[SHOW LOG] Show: '" + getName() + "' starts at " + time + "!");
     }
 
+    public void addShowTypeSchedule(String showType, List<String> times) {
+        if (showType == null || showType.isBlank()) {
+            throw new IllegalArgumentException("Show type can not be null or Empty.");
+        }
+        if (times == null || times.isEmpty()) {
+            throw new IllegalArgumentException("Must provide at least one showtime.");
+        }
+        showTypeSchedules.put(showType.trim(), new ArrayList<>(times));
+    }
+
     public Map<String, List<String>> getShowTypeSchedules() {
         return new HashMap<>(showTypeSchedules);
+    }
+
+    @Override
+    protected boolean canRunCycle() {
+        if (getOperator() == null) {
+            System.out.println("[" + getName() + "] REFUSED to run: no operator assigned.");
+            return false;
+        }
+        if (getWaitingLineSize() == 0) {
+            System.out.println("[" + getName() + "] The house is empty, but the show must go on!");
+        }
+        return true;
     }
 
     @Override

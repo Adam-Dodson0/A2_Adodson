@@ -47,13 +47,13 @@ public class ThemeParkBackup {
                 for (Visitor v : a.getWaitingLine()) {
                     //WAITING, <attractionId>, <visitorId>, <name>, <age>, <ticket>
                     out.println(String.join(SEP, "WAITING", a.getId(), v.getId(), v.getName(),
-                            String.valueOf(v.getAge()), v.getTicketNumber()));
+                            String.valueOf(v.getAge()), v.getTicketType()));
                 }
 
                 for (Visitor v : a.getVisitHistory()) {
                     //SERVED, <attractionId>,<visitorId>,<name>,<age>,<ticket>
                     out.println(String.join(SEP, "SERVED", a.getId(), v.getId(), v.getName(),
-                            String.valueOf(v.getAge()), v.getTicketNumber()));
+                            String.valueOf(v.getAge()), v.getTicketType()));
                 }
 
                 for (MaintenanceRecord m : a.getMaintenanceHistory()) {

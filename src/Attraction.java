@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -25,8 +28,8 @@ import java.util.Queue;
 
 public abstract class Attraction implements Maintainable {
 
-    private String id;
-    private String name;
+    private final String id;
+    private final String name;
     private Staff operator;
 
     private final Queue<Visitor> waitingLine = new LinkedList<>();
@@ -64,21 +67,7 @@ public abstract class Attraction implements Maintainable {
         this.maxCapacityPerCycle = Math.max (1, maxCapacityPerCycle);
     }
 
-    public void setUnderMaintenance(boolean underMaintenance) {
-        this.underMaintenance = underMaintenance;
-    }
-
-    public void incrementVisitorsServed(int count) {
-        if (count > 0) {
-            parkWideTotalServed += count;
-        }
-    }
-
-    public void incrementCyclesRan() {
-        this.cyclesRun++;
-    }
-
-    public String getId() {
+        public String getId() {
         return id;
     }
 
@@ -90,29 +79,35 @@ public abstract class Attraction implements Maintainable {
         return visitorsPerCycle;
     }
 
-    public int getMaxCapacityPerCycle() {
-        return maxCapacityPerCycle;
+
+    // ==========================================
+    //  ----------- VISITOR SERVED  -------------
+    // ==========================================
+
+    public static synchronized int getParkWideTotalServed() {
+        return parkWideTotalServed;
     }
 
-    public Queue<Visitor> getWaitingLine() {
-        return waitingLine;
+    public void incrementVisitorsServed(int count) {
+        if (count > 0) {
+            parkWideTotalServed += count;
+        }
     }
 
-    public List<Visitor> getVisitHistory() {
-        return visitHistory;
+    public static void resetParkWideTotal() {
+        parkWideTotalServed = 0;
     }
 
-    public int getCyclesRan() {
-        return cyclesRun;
+    private static synchronized void addToParkWideTotal(int amount) {
+        parkWideTotalServed += amount;
     }
 
-    public synchronized void setCyclesRan(int cyclesRun) {
-        if (cyclesRun < 0) 
-            throw new IllegalArgumentException("Cycle count can not be negative.");
-                this.cyclesRun = cyclesRun;
-    }
+    // ==========================================
+    //  --------- OPERATOR MANAGEMENT -----------
+    // ==========================================
+    
 
-    public Staff getOperator() {
+    public synchronized  Staff getOperator() {
         return operator;
     }
 
@@ -120,13 +115,177 @@ public abstract class Attraction implements Maintainable {
         this.operator = operator;
     }
 
-    public static int getParkWideTotalServed() {
-        return parkWideTotalServed;
+    public synchronized void assignOperator(Staff staff) {
+        Objects.requireNonNull(staff, "Can not assing a null operator.");
+        this.operator = staff;
+        System.out.println("[" + name + "] Operator assigned: " + staff.getName() + "(Staff " + staff.getId() + ")");
     }
 
-    public static void resetParkWideTotal() {
-        parkWideTotalServed = 0;
+    public synchronized void removeOperator() {
+        if (operator == null) {
+            System.out.println("[" + name + "] No operator to remove.");
+            return;
+        }
+            System.out.println("[" + name + "] Operator removed: " + operator.getName());
+            this.operator = null;
     }
+
+    // ==========================================
+    //  ----------- THE WAITING LINE ------------
+    // ==========================================
+
+    public Queue<Visitor> getWaitingLine() {
+        return waitingLine;
+    }
+
+    public synchronized void addVisitorToLine(Visitor v) {
+        Objects.requireNonNull(v, "Can not add a null visitor to the line");
+        waitingLine.offer(v);
+        System.out.println("[" + name + "] " + v.getName() + "(ID " + getId() + ") joined the waiting line. Line length: " + waitingLine.size());
+    }
+
+    public synchronized Visitor serveNextVisitor() {
+        Visitor v = waitingLine.poll();
+        if (v == null) {
+            System.out.println("[" + name + "] The waiting line is empty -- no visitor to serve.");
+        } else {
+            System.out.println("[" + name + "] Serving next visitor from the front of the line : " + v.getName() + "(ID " + v.getId() + ")");
+        }
+        return v;
+    }
+
+    public synchronized  void printWaitingLine() {
+        System.out.println("[" + name + "] Waiting line (" + waitingLine.size() + "visitor(s), front first):");
+        if (waitingLine.isEmpty()) {
+            System.out.println("    <empty>");
+            return;
+        }
+        int pos = 1;
+        for (Visitor v : waitingLine) {
+            System.out.println("    " + (pos++) + ". " + v);
+        }
+    }
+
+    public synchronized int getWaitingLineSize() {
+        return waitingLine.size();
+    }
+
+    public synchronized List<Visitor> getWaitingLineSnapShot() {
+        return new ArrayList<> (waitingLine);
+    }
+
+    // ==========================================
+    //  -------------VISIT HISTORY---------------
+    // ==========================================
+
+    public List<Visitor> getVisitHistory() {
+        return visitHistory;
+    }
+
+    public synchronized void recordVisitorInHistory(Visitor v) {
+        Objects.requireNonNull(v, "Can not record a null visitor.");
+        visitHistory.add(v);
+        System.out.println("[" + name + "] Recorded in visit history: " + v.getName() + " (ID " + v.getId() + ")");
+    }
+
+    public synchronized boolean hasServed(Visitor v) {
+        Objects.requireNonNull(v, "Can not check history for a null visitor.");
+        boolean found = visitHistory.contains(v);
+        System.out.println("[" + name + "] Has visitor " 
+                            + v.getName() + " (ID " + v.getId() 
+                            + ") been served here? " + (found ? "YES" : "NO"));
+                            return found;
+    }
+
+    public int getHistoryCount() {
+        System.out.println("[" + "] Visit history contains " + visitHistory.size() + "entry/entries.");
+        return visitHistory.size();
+    }
+
+    public synchronized int getSeatsServed() {
+        return visitHistory.size();
+    }
+
+    public synchronized List<Visitor> getHistorySnapshot() {
+        return new ArrayList<> (visitHistory);
+    }
+
+    public synchronized void printHistory() {
+        System.out.println("[" + name + "] Visit history (" + visitHistory.size() + "entry/entries, served order):");
+        if (visitHistory.isEmpty()) {
+            System.out.println("    <Empty>");
+            return;
+        }
+        Iterator<Visitor> it = visitHistory.iterator();
+        int pos = 1;
+        while (it.hasNext()) {
+            System.out.println("    " + (pos++) + ". " + it.next());
+        }
+    }
+
+    public synchronized void printHistoryByAge() {
+        System.out.println("[" + name + "] Visit hustory sorted by AGE (natural order):");
+        List<Visitor> sorted = new ArrayList<>(visitHistory);
+        Collections.sort(sorted);
+        for (Visitor v : sorted) {
+            System.out.println("    " + v);
+        }
+    }
+
+    public synchronized void printHistoryByNameThenTicket() {
+        System.out.println("[" + name + "] Visit history sorted by Name then Ticket type((Comparator):");
+        List<Visitor> sorted = new ArrayList<>(visitHistory);
+        sorted.sort((Comparator.comparing(Visitor::getName).thenComparing(Visitor::getTicketType)));
+        for (Visitor v : sorted) {
+            System.out.println("    " + v);
+        }
+    }
+
+    // ==========================================
+    //  ----------- RUNNING A CYCLE -------------
+    // ==========================================
+
+    public synchronized  int getCyclesRan() {
+        return cyclesRun;
+    }
+
+    protected abstract boolean canRunCycle();
+
+    public void incrementCyclesRan() {
+        this.cyclesRun++;
+    }
+
+    public int getMaxCapacityPerCycle() {
+        return maxCapacityPerCycle;
+    }
+
+    public synchronized void setCyclesRan(int cyclesRun) {
+    if (cyclesRun < 0) 
+        throw new IllegalArgumentException("Cycle count can not be negative.");
+            this.cyclesRun = cyclesRun;
+    }
+
+    public synchronized void runCycle() {
+        System.out.println("[" + name + "] Attempting to run cycle...");
+        if (underMaintenance) {
+            System.out.println("[" + name + "] REFUSED to run. currently under maintenance.");
+            return;
+        }
+        if (!canRunCycle()) {
+            return;
+        }
+        int served = 0;
+        while (served < visitorsPerCycle && !waitingLine.isEmpty()) {
+            Visitor v = waitingLine.poll();
+            System.out.println("[" + name + "] Took " + v.getName() + " (ID " + v.getId() + ") from the front of the line.");
+            visitHistory.add(v);
+            served++;
+        }
+            cyclesRun++;
+            addToParkWideTotal(served);
+            System.out.println("[" + name + "] Cycle #" + cyclesRun + "completed  -- served" + served + "visitor(s) this cycle");
+    }
+    
 
     // ==========================================
     //  -- REQUIRED FOR MAINTAINABLE INTERFACE --
@@ -144,11 +303,6 @@ public abstract class Attraction implements Maintainable {
     }
 
     @Override
-    public boolean isUnderMaintenance() {
-        return underMaintenance;
-    }
-
-    @Override
     public synchronized void completeMaintenance(String notes, Staff technician, int downtimeMinutes) {
         if (!underMaintenance) {
             throw new IllegalArgumentException(getMaintainableName() + " is not under maintenance -- nothing to complete");
@@ -162,6 +316,15 @@ public abstract class Attraction implements Maintainable {
     }
 
     @Override
+    public boolean isUnderMaintenance() {
+        return underMaintenance;
+    }
+
+    public void setUnderMaintenance(boolean underMaintenance) {
+        this.underMaintenance = underMaintenance;
+    }
+
+    @Override
     public synchronized List<MaintenanceRecord> getMaintenanceHistory() { 
         return new ArrayList<>(maintenanceHistory);
     }
@@ -170,6 +333,7 @@ public abstract class Attraction implements Maintainable {
         return cyclesRun - cyclesRunAtLastMaintenance;
     }
 
+    //toString
     @Override
     public synchronized String toString() {
         return getClass().getSimpleName() + "{ID = " + id + ", Name = " + name
