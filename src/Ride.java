@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Represemts a Ride Attraction in the Theme Park. has concurrency with waiting
- * lines and assigned operators.
+ * Represents a Ride Attraction in the Theme Park. Adds inspection workflow and
+ * maintenance tracking on top of the shared Attraction behaviour.
  *
  * @author Adam Dodson
  * @version 1
@@ -24,9 +24,13 @@ public class Ride extends Attraction implements Inspectable {
     private MaintenanceType pendingMaintenanceType;
 
     /**
-     * Constructs a Ride Attraction.
+     * Constructs a Ride Attraction, starting in service and with no prior
+     * inspection.
      *
-     * @param name Ride name
+     * @param id unique identifier
+     * @param name display name
+     * @param visitorsPerCycle visitors served per cycle
+     * @param maxCapacityPerCycle max seats per cycle
      */
     public Ride(String id, String name, int visitorsPerCycle, int maxCapacityPerCycle) {
         super(id, name, visitorsPerCycle, maxCapacityPerCycle);
@@ -94,6 +98,8 @@ public class Ride extends Attraction implements Inspectable {
     // ==========================================
     // --- REQUIRED FOR INSPECTABLE INTERFACE ---
     // ==========================================
+     // A ride only passes inspection if it's currently in service and
+    // not already closed; any other state fails and forces maintenance
     @Override
     public String getInspectableName() {
         return getName();

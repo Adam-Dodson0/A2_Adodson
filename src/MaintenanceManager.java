@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * Tracks every {@link Maintainable} item in the park (rides, shows,
+ * toilets) in one place and reports their current maintenance status.
  *
- * MaintenanceManager
+ * @author Adam Dodson
+ * @version 1
  */
 public class MaintenanceManager {
 

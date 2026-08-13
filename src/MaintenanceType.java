@@ -1,4 +1,13 @@
 
+/**
+ * Fixed set of maintenance categories (CLEAN, ROUTINE, REPAIR, EMERGENCY,
+ * SAFETY_UPGRADE), implemented as an enum-like set of named constants
+ * rather than a Java {@code enum}.
+ *
+ * @author Adam Dodson
+ * @version 1
+ */
+
 public class MaintenanceType {
 
     public static final MaintenanceType CLEAN = new MaintenanceType("CLEAN", "Clean up service.");

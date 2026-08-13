@@ -9,19 +9,11 @@ import java.util.Objects;
 import java.util.Queue;
 
 /**
- * Abstract class of a Theme parks Attractions ABSTRACT base class for every
- * attraction in the park. All shared state and behaviour lives here, written
- * once: - unique numeric identifier + name - the waiting line (Queue/LinkedList
- * -- strict FIFO, unbounded) - the visit history (ArrayList -- ordered,
- * growable, duplicates allowed) - the operator (association with Staff) -
- * visitors served per cycle + cycles run - runCycle() (TEMPLATE METHOD --
- * shared machinery here, each subclass supplies its own canRunCycle() rule) -
- * the maintenance workflow (implements {@link Maintainable}) * Being abstract
- * stops anyone creating a "generic attraction" that is none of the specific
- * kinds (ABSTRACTION). Every field stays private, with validated access only
- * through methods (ENCAPSULATION). Concrete subclasses supply their own
- * {@link #canRunCycle()} rule (POLYMORPHISM), and every attraction
- * automatically INHERITS every method below.
+ * Abstract base class for every attraction in the Theme Park (Ride, Show).
+ * Holds all shared state and behaviour: the waiting line, visit history,
+ * assigned operator, and cycle-running logic (template method pattern —
+ * {@link #runCycle()} is fixed here, subclasses only supply their own
+ * {@link #canRunCycle()} rule).
  */
 public abstract class Attraction implements Maintainable {
 
@@ -43,10 +35,14 @@ public abstract class Attraction implements Maintainable {
     private final List<MaintenanceRecord> maintenanceHistory = new ArrayList<>();
 
     /**
+     * Constructs an Attraction. Subclasses call this via super().
      *
-     * @param id
-     * @param name
-     * @param visitorsPerCycle
+     * @param id unique identifier for the attraction
+     * @param name display name; can not be null or blank
+     * @param visitorsPerCycle how many visitors are served each time
+     * {@link #runCycle()} runs; must be at least 1
+     * @param maxCapacityPerCycle hard ceiling on visitors per cycle
+     * @throws IllegalArgumentException if name is blank or visitorsPerCycle < 1
      */
     protected Attraction(String id, String name, int visitorsPerCycle, int maxCapacityPerCycle) {
         if (name == null || name.trim().isEmpty()) {
@@ -101,10 +97,11 @@ public abstract class Attraction implements Maintainable {
         return operator;
     }
 
+    // setOperator is the silent internal setter (used by subclasses' own
     public void setOperator(Staff operator) {
         this.operator = operator;
     }
-
+    // assignOperator overrides); assignOperator is the public, logged entry point
     public synchronized void assignOperator(Staff staff) {
         Objects.requireNonNull(staff, "Can not assing a null operator.");
         this.operator = staff;
@@ -269,6 +266,7 @@ public abstract class Attraction implements Maintainable {
             visitHistory.add(v);
             served++;
         }
+        // Serve up to visitorsPerCycle visitors, or fewer if the line runs out
         cyclesRun++;
         addToParkWideTotal(served);
         System.out.println("[" + name + "] Cycle #" + cyclesRun + " completed -- served " + served + " visitor(s) this cycle");

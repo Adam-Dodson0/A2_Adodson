@@ -1,12 +1,11 @@
 
 /**
- * Manages the whole collection of attractions
- *
+ * Manages the whole collection of Attractions in a single park —
+ * registration, lookup, and park-wide reporting (seats served,
+ * distinct visitors).
  *
  * @author Adam Dodson
  * @version 1
- *
- * @param ThemePark
  */
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,12 +33,17 @@ public class ThemePark {
     }
 
     /**
-     * Registers an attractio under its ID
+     * Registers an attraction under its ID so it can be tracked, reported on,
+     * and included in park backups.
+     *
+     * @param a the attraction to register; can not be null
+     * @throws IllegalArgumentException if an attraction with the same ID is
+     * already registered
      */
     public synchronized void registerAtrraction(Attraction a) {
         Objects.requireNonNull(a, "Attraction ID can not be null");
         if (attractions.containsKey(a.getId())) {
-            throw new IllegalArgumentException("No attraction is registered with ID '" + a.getId() + "'.");
+            throw new IllegalArgumentException("An attraction is already registered with ID '" + a.getId() + "'.");
         }
         attractions.put(a.getId(), a);
         System.out.println("[" + parkName + "] registed " + a.getClass().getSimpleName() + " '" + a.getName() + "' under ID " + a.getId() + ".");
@@ -75,9 +79,8 @@ public class ThemePark {
         }
     }
 
-    /**
-     * Distinct visitors across the whole park -- each person counted once.
-     */
+    // Set automatically dedupes visitors who appear in more than one
+    // attraction's history, since equals()/hashCode() key on visitor ID
     public synchronized int reportDistinctVisitors() {
         Set<Visitor> distinct = new HashSet<>();
         for (Attraction a : attractions.values()) {

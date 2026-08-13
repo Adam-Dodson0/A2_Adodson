@@ -1,24 +1,24 @@
 
 /**
- *  A park visitor, Adds a ticket type on top
- *  of the common Person Data. Implements Comparable to
- * be able to order visitors by age.
+ * A park visitor. Adds a ticket type on top of the common People data.
+ * Implements Comparable so visitors can be sorted by age.
  *
  * @author Adam Dodson
  * @version 1
  * @see People
- * @param Visitor
  */
 public class Visitor extends People implements Comparable<Visitor> {
 
     private String ticketType;
 
     /**
+     * Constructs a Visitor with an explicit ticket type.
      *
-     * @param id
-     * @param name
-     * @param age
-     * @param ticketType
+     * @param id numeric-only unique identifier
+     * @param name the visitor's display name
+     * @param age the visitor's age
+     * @param ticketType ticket category (e.g. VIP, ADULT, CHILD); defaults to
+     * "NORMAL" if null/blank
      */
     public Visitor(String id, String name, int age, String ticketType) {
         super(id, name, age);
@@ -26,10 +26,11 @@ public class Visitor extends People implements Comparable<Visitor> {
     }
 
     /**
+     * Constructs a Visitor with the default "NORMAL" ticket type.
      *
-     * @param id
-     * @param name
-     * @param age
+     * @param id numeric-only unique identifier
+     * @param name the visitor's display name
+     * @param age the visitor's age
      */
     public Visitor(String id, String name, int age) {
         this(id, name, age, "NORMAL");

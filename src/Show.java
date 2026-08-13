@@ -56,6 +56,8 @@ public class Show extends Attraction {
         return new HashMap<>(showTypeSchedules);
     }
 
+    // Unlike a Ride, an empty waiting line doesn't stop a Show — it
+    // still runs to schedule, just serves 0 visitors
     @Override
     protected boolean canRunCycle() {
         if (getOperator() == null) {

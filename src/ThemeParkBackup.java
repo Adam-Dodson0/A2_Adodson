@@ -7,6 +7,15 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Utility class for saving a {@link ThemePark} to a plain-text file and
+ * restoring it. Lines are tagged by record type (ATTRACTION, OPERATOR, WAITING,
+ * SERVED, MAINTENANCE); malformed lines are skipped individually so one bad
+ * line doesn't fail the whole restore.
+ *
+ * @author Adam Dodson
+ * @version 1
+ */
 public class ThemeParkBackup {
 
     private static final String SEP = ",";
@@ -80,7 +89,8 @@ public class ThemeParkBackup {
 
         ThemePark park = new ThemePark(parkName);
         int lineNo = 0, bad = 0;
-
+        // Skip and log malformed lines individually so one bad record
+        // doesn't abort the whole restore
         try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = in.readLine()) != null) {
@@ -214,6 +224,8 @@ public class ThemeParkBackup {
                 if (maintTarget != null) {
                     maintTarget.getMaintenanceHistory().add(record);
                 }
+                // Records that reference an unregistered attraction ID are treated
+                // as malformed rather than silently ignored
                 break;
             }
 

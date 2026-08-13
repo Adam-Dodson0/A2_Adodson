@@ -10,7 +10,6 @@ import java.util.Objects;
  *
  * @author Adam Dodson
  * @version 1
- * @param Staff
  */
 public class Staff extends People {
 
@@ -34,10 +33,11 @@ public class Staff extends People {
     }
 
     /**
+     * Constructs a Staff member with the default role of "Staff Member".
      *
-     * @param id
-     * @param name
-     * @param age
+     * @param id numeric-only unique identifier
+     * @param name the staff member's display name
+     * @param age the staff member's age
      */
     public Staff(String id, String name, int age) {
         this(id, name, age, "Staff Member");
@@ -55,9 +55,13 @@ public class Staff extends People {
     }
 
     /**
-     * safety inspection on any inspectable object in the park.
+     * Runs a safety inspection on any Inspectable target, closing it first and
+     * reopening it if the inspection passes.
      *
-     * @param target
+     * @param target the item being inspected (Ride, Toilet)
+     * @param notes inspection notes to record if it passes; falls back to a
+     * default message if blank
+     * @throws IllegalArgumentException if target is null
      */
     public void performInspection(Inspectable target, String notes) {
         if (target == null) {

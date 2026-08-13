@@ -4,8 +4,12 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * A non-Attraction facility in the park. Implements {@link Inspectable}
+ * and {@link Maintainable} the same way a Ride does, without being an
+ * {@link Attraction} — toilets have no waiting line or visit history.
  *
- * Toilet
+ * @author Adam Dodson
+ * @version 1
  */
 public class Toilet implements Inspectable, Maintainable {
 

@@ -191,6 +191,8 @@ public class AssignmentTwo {
 
         System.out.println("--- Attempting to restore a corrupted file ---");
         try (PrintWriter out = new PrintWriter("corrupted_backup.txt")) {
+            // Deliberately malformed records to test that the restore loop
+            // skips bad lines instead of crashing
             out.println("ATTRACTION, Ride, 684 Splash falls, 3, 0");
             out.println("WAITING,684, garbage-line-not-enough-fields");
             out.println("BANANA, this,is,not,a,record");
@@ -255,6 +257,8 @@ public class AssignmentTwo {
             parade.addVisitorToLine(new Visitor("71" + String.format("%02d", i), "ParadeGuest" + i, 20 + i));
         }
 
+        // Runs the two attractions' cycles concurrently on separate threads;
+        // each only serves visitors up to its queue size, so extra cycles are no-ops
         ExecutorService pool = Executors.newFixedThreadPool(2);
         Runnable runRapids = () -> {
             for (int i = 0; i < 10; i++) {

@@ -1,9 +1,8 @@
 
 /** *
- *  Abstract Class showing a single person
- *  within the Theme park can be Staff or Visitor
- *
- * @param People
+ * Abstract superclass for anyone in the Theme Park — Staff or Visitor.
+ * Holds the identity fields shared by both (ID, name, age) and enforces
+ * that IDs are always numeric.
  *
  * @author Adam Dodson
  * @version 1
@@ -17,11 +16,12 @@ public abstract class People {
     private int age;
 
     /**
-     * Constructs a new Persons Record
+     * Constructs a new person record shared by Staff and Visitor.
      *
-     * @param id
-     * @param name
-     * @param age
+     * @param id numeric-only unique identifier
+     * @param name the person's display name
+     * @param age the person's age; negative values are clamped to 0
+     * @throws IllegalArgumentException if id is not purely numeric
      */
     public People(String id, String name, int age) {
         if (!id.matches("\\d+")) {
