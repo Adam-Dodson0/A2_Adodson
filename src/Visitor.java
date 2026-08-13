@@ -22,7 +22,7 @@ public class Visitor extends People implements Comparable<Visitor> {
      */
     public Visitor(String id, String name, int age, String ticketType) {
         super(id, name, age);
-        this.ticketType = (ticketType == null || ticketType.isBlank()) ? "Normal" : ticketType;
+        this.ticketType = (ticketType == null || ticketType.isBlank()) ? "NORMAL" : ticketType;
     }
 
     /**
@@ -32,7 +32,7 @@ public class Visitor extends People implements Comparable<Visitor> {
      * @param age
      */
     public Visitor(String id, String name, int age) {
-        this(id, name, age, "Normal");
+        this(id, name, age, "NORMAL");
     }
 
     public String getTicketType() {

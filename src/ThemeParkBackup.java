@@ -90,7 +90,7 @@ public class ThemeParkBackup {
                 }
                 try {
                     parseLine(park, line, lineNo);
-                } catch (NumberFormatException | IndexOutOfBoundsException | NullPointerException e) {
+                } catch (IllegalArgumentException | IndexOutOfBoundsException | NullPointerException e) {
                     bad++;
                     System.out.println("[RESTORE] Line " + lineNo + " skipped (malformed): " + e.getMessage());
                 }

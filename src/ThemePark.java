@@ -1,14 +1,13 @@
 
 /**
- * Represents the central Theme Park system managing park
- * wide visitor counts and registered attractions
+ * Manages the whole collection of attractions
+ *
  *
  * @author Adam Dodson
  * @version 1
  *
  * @param ThemePark
  */
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -34,6 +33,9 @@ public class ThemePark {
         return parkName;
     }
 
+    /**
+     * Registers an attractio under its ID
+     */
     public synchronized void registerAtrraction(Attraction a) {
         Objects.requireNonNull(a, "Attraction ID can not be null");
         if (attractions.containsKey(a.getId())) {
@@ -73,6 +75,9 @@ public class ThemePark {
         }
     }
 
+    /**
+     * Distinct visitors across the whole park -- each person counted once.
+     */
     public synchronized int reportDistinctVisitors() {
         Set<Visitor> distinct = new HashSet<>();
         for (Attraction a : attractions.values()) {

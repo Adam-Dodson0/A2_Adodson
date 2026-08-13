@@ -49,9 +49,6 @@ public abstract class Attraction implements Maintainable {
      * @param visitorsPerCycle
      */
     protected Attraction(String id, String name, int visitorsPerCycle, int maxCapacityPerCycle) {
-        if (id == null || !id.matches("\\d+")) {
-            throw new IllegalArgumentException("Attraction ID can only be numeric: " + id);
-        }
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Attractions can not be nameless");
         }
@@ -147,7 +144,7 @@ public abstract class Attraction implements Maintainable {
     }
 
     public synchronized void printWaitingLine() {
-        System.out.println("[" + name + "] Waiting line (" + waitingLine.size() + "visitor(s), front first):");
+        System.out.println("[" + name + "] Waiting line (" + waitingLine.size() + " visitor(s), front first):");
         if (waitingLine.isEmpty()) {
             System.out.println("    <empty>");
             return;
@@ -189,7 +186,7 @@ public abstract class Attraction implements Maintainable {
     }
 
     public int getHistoryCount() {
-        System.out.println("[" + "] Visit history contains " + visitHistory.size() + "entry/entries.");
+        System.out.println("[" + name + "] Visit history contains " + visitHistory.size() + " entry/entries.");
         return visitHistory.size();
     }
 
@@ -202,9 +199,9 @@ public abstract class Attraction implements Maintainable {
     }
 
     public synchronized void printHistory() {
-        System.out.println("[" + name + "] Visit history (" + visitHistory.size() + "entry/entries, served order):");
+        System.out.println("[" + name + "] Visit history (" + visitHistory.size() + " entry/entries, served order):");
         if (visitHistory.isEmpty()) {
-            System.out.println("    <Empty>");
+            System.out.println("<Empty>");
             return;
         }
         Iterator<Visitor> it = visitHistory.iterator();
@@ -215,20 +212,20 @@ public abstract class Attraction implements Maintainable {
     }
 
     public synchronized void printHistoryByAge() {
-        System.out.println("[" + name + "] Visit hustory sorted by AGE (natural order):");
+        System.out.println("[" + name + "] Visit history sorted by AGE (natural order):");
         List<Visitor> sorted = new ArrayList<>(visitHistory);
         Collections.sort(sorted);
         for (Visitor v : sorted) {
-            System.out.println("    " + v);
+            System.out.println("" + v);
         }
     }
 
     public synchronized void printHistoryByNameThenTicket() {
-        System.out.println("[" + name + "] Visit history sorted by Name then Ticket type((Comparator):");
+        System.out.println("[" + name + "] Visit history sorted by Name then Ticket type(Comparator):");
         List<Visitor> sorted = new ArrayList<>(visitHistory);
         sorted.sort((Comparator.comparing(Visitor::getName).thenComparing(Visitor::getTicketType)));
         for (Visitor v : sorted) {
-            System.out.println("    " + v);
+            System.out.println("" + v);
         }
     }
 
@@ -274,7 +271,7 @@ public abstract class Attraction implements Maintainable {
         }
         cyclesRun++;
         addToParkWideTotal(served);
-        System.out.println("[" + name + "] Cycle #" + cyclesRun + "completed  -- served" + served + "visitor(s) this cycle");
+        System.out.println("[" + name + "] Cycle #" + cyclesRun + " completed -- served " + served + " visitor(s) this cycle");
     }
 
     // ==========================================

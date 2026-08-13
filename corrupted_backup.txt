@@ -1,0 +1,4 @@
+ATTRACTION, Ride, 684 Splash falls, 3, 0
+WAITING,684, garbage-line-not-enough-fields
+BANANA, this,is,not,a,record
+WAITING, 684, 2010, Marcus Ranum, 26, NORMAL

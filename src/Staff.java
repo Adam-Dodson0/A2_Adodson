@@ -1,11 +1,12 @@
 
+import java.util.Objects;
+
 /**
- * Represents a Theme Park employee
- *  capable of operating attractions
- * and performing basic safety inspections.
+ * Represents a Theme Park employee capable of operating attractions and
+ * performing basic safety inspections.
  *
- * Extends the People superclass and implements
- * role management and inspection workflows.
+ * Extends the People superclass and implements role management and inspection
+ * workflows.
  *
  * @author Adam Dodson
  * @version 1
@@ -63,7 +64,7 @@ public class Staff extends People {
             throw new IllegalArgumentException(" target for inspection can not be null or empty");
         }
 
-        System.out.println("[STAFF LOG] Staff " + getName() + "started inspecting" + target.getInspectableName());
+        System.out.println("[STAFF LOG] Staff " + getName() + " started inspecting " + target.getInspectableName());
 
         target.closeForInspection();
 
@@ -75,7 +76,7 @@ public class Staff extends People {
         }
 
         if (!passed) {
-            System.out.println("[STAFF LOG] Inspection failed." + target.getInspectableName() + " Has closed for maintenance.");
+            System.out.println("[STAFF LOG] Inspection failed. " + target.getInspectableName() + " Has closed for maintenance.");
             if (target instanceof Ride rideTarget) {
                 rideTarget.maintenance();
             }
@@ -89,12 +90,19 @@ public class Staff extends People {
 
             target.recordInspection(recordNotes);
             target.reopen();
-            System.out.println("[STAFF LOG] Staff " + getName() + "has finished inspection on " + target.getInspectableName());
+            System.out.println("[STAFF LOG] Staff " + getName() + " has finished inspection on " + target.getInspectableName());
         }
     }
 
     public void performInspection(Inspectable target) {
         performInspection(target, "Routine inpsection passed");
+    }
+
+    public void performMaintenance(Maintainable item, MaintenanceType type, String notes, int downtimeMinutes) {
+        Objects.requireNonNull(item, "Can not perform maintenance on a null item.");
+        System.out.println("[MAINTENANCE] " + getName() + " (Staff " + getId() + ") begins servicing: " + item.getMaintainableName());
+        item.beginMaintenance(type);
+        item.completeMaintenance(notes, this, downtimeMinutes);
     }
 
     @Override

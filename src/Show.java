@@ -8,7 +8,6 @@
  * @param Show
  * @see Attraction
  */
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +20,9 @@ public class Show extends Attraction {
     public Show(String id, String name, int visitorsPerCycle,
             int maxCapacityPerCycle, List<String> showTimes) {
         super(id, name, visitorsPerCycle, maxCapacityPerCycle);
+        if (showTimes != null && !showTimes.isEmpty()) {
+            showTypeSchedules.put("Default", new ArrayList<>(showTimes));
+        }
     }
 
     @Override

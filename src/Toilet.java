@@ -22,9 +22,6 @@ public class Toilet implements Inspectable, Maintainable {
         Objects.requireNonNull(id, "Toilet ID can not be Null.");
         Objects.requireNonNull(location, "Location can not be null.");
 
-        if (!id.matches("\\+d")) {
-            throw new IllegalArgumentException("Toiler ID must be numbers only:" + id);
-        }
         if (location.trim().isEmpty()) {
             throw new IllegalArgumentException("location can not be empty.");
         }
