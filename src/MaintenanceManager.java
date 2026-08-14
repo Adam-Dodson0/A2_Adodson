@@ -21,7 +21,7 @@ public class MaintenanceManager {
     }
 
     public synchronized void reportStatus() {
-        System.out.println("[MAINTENANCE] status report for " + tracked.size() + "tracked item(s):");
+        System.out.println("[MAINTENANCE] status report for " + tracked.size() + " tracked item(s):");
         if (tracked.isEmpty()) {
             System.out.println("  <none registered>");
             return;

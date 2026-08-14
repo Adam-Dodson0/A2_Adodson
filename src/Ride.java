@@ -98,13 +98,13 @@ public class Ride extends Attraction implements Inspectable {
     // ==========================================
     // --- REQUIRED FOR INSPECTABLE INTERFACE ---
     // ==========================================
-     // A ride only passes inspection if it's currently in service and
-    // not already closed; any other state fails and forces maintenance
     @Override
     public String getInspectableName() {
         return getName();
     }
 
+    // A ride only passes inspection if it's currently in service and
+    // not already closed; any other state fails and forces maintenance
     public boolean inspect() {
         if (inService && !closedForInspection) {
             this.lastInspectionOutcome = "Passed inspection";

@@ -77,7 +77,7 @@ public class ThemeParkBackup {
             System.out.println("[BACKUP] Save completed successfully: " + filename);
             return true;
         } catch (FileNotFoundException e) {
-            System.out.println("[BACKUP] FAILED to save -- the file could ne be created or opened: " + e.getMessage());
+            System.out.println("[BACKUP] FAILED to save -- the file could not be created or opened: " + e.getMessage());
             return false;
         }
     }
@@ -107,7 +107,7 @@ public class ThemeParkBackup {
             }
 
             System.out.println("[RESTORE] load completed: " + lineNo + " line(s) read, "
-                    + bad + "malformed line(s) skipped.");
+                    + bad + " malformed line(s) skipped.");
             return park;
 
         } catch (FileNotFoundException e) {

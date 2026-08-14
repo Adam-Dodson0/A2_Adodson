@@ -23,6 +23,7 @@ public class AssignmentTwo {
         // =======================================
         // PART 1 Modelling the Theme Parks People 
         // =======================================
+        System.out.println();
         //Staff and Visitors to the Theme park
         Staff staffA = new Staff("15", "Tim Berners Lee", 51, "Ride Operator");
         Staff staffB = new Staff("245", "Alan Turing", 32, "Maintenance");
@@ -59,6 +60,7 @@ public class AssignmentTwo {
         // =============================================
         // PART 2 Modelling the Parks People Attractions
         // =============================================
+        System.out.println();
         Ride coaster = new Ride("R728", "Thunder Coaster", 23, 47);
         Show animal = new Show("S391", "Animal Feeding", 27, 83, List.of("10:15", "13:40", "15:25"));
         Toilet blockA = new Toilet("TB614", "Near the main entrance");
@@ -79,6 +81,7 @@ public class AssignmentTwo {
         // ==================================
         // PART 3 The Attractions Waitingline
         // ==================================
+        System.out.println();
         coaster.addVisitorToLine(visD);
         coaster.addVisitorToLine(visC);
         coaster.addVisitorToLine(visA);
@@ -96,6 +99,7 @@ public class AssignmentTwo {
         // ========================
         // PART 4 The visit History
         // ========================
+        System.out.println();
         animal.recordVisitorInHistory(visA);
         animal.recordVisitorInHistory(visC);
         animal.recordVisitorInHistory(visF);
@@ -113,6 +117,7 @@ public class AssignmentTwo {
         // ==============================
         // PART 5 Operating an attraction
         // ==============================
+        System.out.println();
         System.out.println("---  Ride runs successfully (2 visitors per cycle) ---");
         System.out.println("[Thunder Coaster] Cycles run so far: " + coaster.getCyclesRan());
         coaster.printWaitingLine();
@@ -121,21 +126,25 @@ public class AssignmentTwo {
         coaster.printHistory();
         System.out.println("[Thunder Coaster] Cycles run so far: " + coaster.getCyclesRan());
 
+        System.out.println();
         System.out.println("--- Ride refuses: closed for inspected ---");
         coaster.closeForInspection();
         coaster.runCycle();
         coaster.reopen();
 
+        System.out.println();
         System.out.println("--- Ride refuses: empty queue ---");
         coaster.runCycle();
         coaster.runCycle();
 
+        System.out.println();
         System.out.println("--- Feeding goes ahead to an empty house ---");
         System.out.println("[Animal Feeding Show] Cycles run so far: " + animal.getCyclesRan());
         animal.printWaitingLine();
         animal.runCycle();
         System.out.println("[Animal Feeding Show] Cycles run so far: " + animal.getCyclesRan());
 
+        System.out.println();
         System.out.println("--- Show with waiting visitors ---");
         animal.addVisitorToLine(visB);
         animal.addVisitorToLine(visE);
@@ -145,6 +154,7 @@ public class AssignmentTwo {
         // ========================
         // PART 6 Managing the park
         // ========================
+        System.out.println();
         ThemePark park = new ThemePark("Gold Coast Adventure World");
         Ride ferris = new Ride("18", "Giant ferris Wheel", 9, 12);
         ferris.assignOperator(staffB);
@@ -162,15 +172,18 @@ public class AssignmentTwo {
         // ========================================
         // PART 7 Backing up and restoring the park
         // ========================================
+        System.out.println();
         coaster.addVisitorToLine(new Visitor("421584", "Ivan Sutherland", 16, "NORMAL"));
         coaster.addVisitorToLine(new Visitor("841358", "John von Neumann", 48, "VIP"));
 
         String backUpFile = "park_backup.txt";
         ThemeParkBackup.saveParkToFile(park, backUpFile);
 
+        System.out.println();
         System.out.println("--- Restoring into a fresh park ---");
         ThemePark restored = ThemeParkBackup.loadParkFromFile("Gold Coast Adventure world (restored)", backUpFile);
 
+        System.out.println();
         System.out.println(" --- Verifying the restored park matches the original park ---");
         for (Attraction original : park.getAttractions().values()) {
             Attraction copy = restored.getAttractions().get(original.getId());
@@ -186,9 +199,11 @@ public class AssignmentTwo {
             }
         }
 
+        System.out.println();
         System.out.println("--- Attempting to restore from a missing file ---");
         ThemeParkBackup.loadParkFromFile("Ghost Park", "No_File_Exists.txt");
 
+        System.out.println();
         System.out.println("--- Attempting to restore a corrupted file ---");
         try (PrintWriter out = new PrintWriter("corrupted_backup.txt")) {
             // Deliberately malformed records to test that the restore loop
@@ -208,12 +223,14 @@ public class AssignmentTwo {
         // ==================
         // PART 8 Maintenance
         // ==================
+        System.out.println();
         MaintenanceManager maintenanceManager = new MaintenanceManager();
         maintenanceManager.register(coaster);
         maintenanceManager.register(ferris);
         maintenanceManager.register(blockA);
         maintenanceManager.reportStatus();
 
+        System.out.println();
         System.out.println("--- A ride is serviced from start to finish ---");
         try {
             staffA.performMaintenance(coaster, MaintenanceType.ROUTINE, "Lubricated track, tightened bolts", 20);
@@ -224,20 +241,22 @@ public class AssignmentTwo {
         // ===================================
         // PART 9  Exception Handling Showcase
         // ===================================
+        System.out.println();
         System.out.println("--- Catching a nullPointerException ---");
         try {
             coaster.addVisitorToLine(null);
         } catch (NullPointerException e) {
             System.out.println("Caught expected NullPointerException: " + e.getMessage());
         }
-
+System.out.println();
         System.out.println("--- Catching an IllegalArgumentException ---");
         try {
             new Visitor("Not-a-number", "Bad ID Visitor", 30);
         } catch (IllegalArgumentException e) {
-            System.out.println("Caught expected IllegalArgumentException" + e.getMessage());
+            System.out.println("Caught expected IllegalArgumentException: " + e.getMessage());
         }
 
+        System.out.println();
         System.out.println("--- Catching an IOException error while backing up to an invalid path ---");
         boolean saved = ThemeParkBackup.saveParkToFile(park, "/no/such/directory/park_backup.txt");
         System.out.println("Save to an invalid path succeeded? " + saved);
@@ -245,6 +264,7 @@ public class AssignmentTwo {
         // ======================================
         // PART 10 Running the park (concurrency)
         // ======================================
+        System.out.println();
         Attraction.resetParkWideTotal();
 
         Ride rapids = new Ride("925", "River Rapids", 6, 10);

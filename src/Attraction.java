@@ -322,7 +322,7 @@ public abstract class Attraction implements Maintainable {
     public synchronized String toString() {
         return getClass().getSimpleName() + "{ID = " + id + ", Name = " + name
                 + ", PerCycle = " + visitorsPerCycle + ", CyclesRan = " + cyclesRun
-                + ", Waiting = " + waitingLine.size() + ", Served=" + visitHistory.size()
+                + ", Waiting = " + waitingLine.size() + ", Served = " + visitHistory.size()
                 + ", Operator = " + (operator == null ? "none" : operator.getName())
                 + ", Maintenance = " + (underMaintenance ? "IN PROGRESS" : maintenanceHistory.size() + " record(s)") + "}";
     }

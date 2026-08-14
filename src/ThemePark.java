@@ -75,7 +75,7 @@ public class ThemePark {
             return;
         }
         for (Attraction a : attractions.values()) {
-            System.out.println("    " + a.getName() + " (ID " + a.getId() + "): " + a.getSeatsServed() + "seat(s) served over " + a.getCyclesRan() + "cycle(s).");
+            System.out.println("    " + a.getName() + " (ID " + a.getId() + "): " + a.getSeatsServed() + " seat(s) served over " + a.getCyclesRan() + " cycle(s).");
         }
     }
 
