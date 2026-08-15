@@ -248,7 +248,7 @@ public class AssignmentTwo {
         } catch (NullPointerException e) {
             System.out.println("Caught expected NullPointerException: " + e.getMessage());
         }
-System.out.println();
+        System.out.println();
         System.out.println("--- Catching an IllegalArgumentException ---");
         try {
             new Visitor("Not-a-number", "Bad ID Visitor", 30);
@@ -304,6 +304,5 @@ System.out.println();
 
         System.out.println();
         System.out.println("--- End of demonstrating all parts ---");
-
     }
 }
